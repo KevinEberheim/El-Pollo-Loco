@@ -23,7 +23,7 @@ class MovableObject {
     }
 
     moveRight() {
-        this.x += 5;
+        this.x += 50;
     }
 
     moveLeft() {
@@ -31,5 +31,12 @@ class MovableObject {
             this.x -= this.speed;
         }, 1000 / 60);
         
+    }
+
+    playAnimation(images) {
+        let indexImage = this.currentImage % images.length;
+        let path = images[indexImage];
+        this.img = this.imageCache[path];
+        this.currentImage++;
     }
 }
