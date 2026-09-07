@@ -10,6 +10,22 @@ class MovableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
+    energy = 100;
+    lastHit = 0;
+
+    draw(ctx) {
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    }
+
+    drawFrame(ctx) {
+        if (this instanceof Character || this instanceof Chicken || this instanceof Endboss) {
+        ctx.beginPath();
+        ctx.lineWidth = '5';
+        ctx.strokeStyle = 'blue';
+        ctx.rect(this.x, this.y, this.width, this.height);
+        ctx.stroke();
+        }
+    }
 
     applyGravity() {
         setInterval(() => {
@@ -22,6 +38,32 @@ class MovableObject {
 
     isAboveGround() {
         return this.y < 140;
+    }
+
+    isColliding(movableObject) {
+        return this.x + this.width > movableObject.x &&
+            this.y + this.height > movableObject.y &&
+            this.x < movableObject.x + movableObject.width &&
+            this.y < movableObject.y + movableObject.height;
+    }
+
+    hit() {
+        this.energy -= 1;
+        if (this.energy < 0) {
+            this.energy = 0;
+        } else {
+            this.lastHit = new Date().getTime();
+        }
+    }
+
+    isHurt() {
+        let timepassed = new Date().getTime() - this.lastHit;
+        timepassed = timepassed / 1000;
+        return this.energy < 100 && timepassed < 1; 
+    }
+
+    isDead() {
+        return this.energy == 0;
     }
 
     loadImage(path) {
