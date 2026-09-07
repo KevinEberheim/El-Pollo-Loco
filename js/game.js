@@ -26,6 +26,9 @@ window.addEventListener("keydown", (e) => {
     if (e.key == "ArrowDown") {
         keyboard.DOWN = true;
     }
+    if (e.key == "d") {
+        keyboard.D = true;
+    }
 });
 
 window.addEventListener("keyup", (e) => {
@@ -43,5 +46,8 @@ window.addEventListener("keyup", (e) => {
     }
     if (e.key == "ArrowDown") {
         keyboard.DOWN = false;
+    }
+    if (e.key == "d") {
+        keyboard.D = false;
     }
 });

@@ -12,11 +12,15 @@ class MovableObject extends DrawableObject {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             }
-        }, 1000 / 60);
+        }, 1000 / 25);
     }
 
     isAboveGround() {
+        if (this instanceof ThrowableObject) {
+            return true;
+        } else {
         return this.y < 140;
+        }
     }
 
     isColliding(movableObject) {
