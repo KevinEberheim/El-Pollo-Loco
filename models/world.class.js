@@ -4,7 +4,10 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
-    statusBar = new StatusBar();
+    coinsCounter = 0;
+    statusBarHealth = new StatusBar(10, 0, 'IMAGES_Health', 100);
+    statusBarCoins = new StatusBar(10, 50, 'IMAGES_Coins', 0);
+    statusBarBottle = new StatusBar(10, 100, 'IMAGES_Bottle', 0);
     throwableObjects = [];
 
     constructor(canvas, keyboard) {
@@ -21,7 +24,8 @@ class World {
 
     run() {
         setInterval(() => {
-            this.checkCollisions();
+            this.checkEnemyCollisions();
+            this.checkCoinCollisions();
         }, 1000 / 60);
 
         setInterval(() => {
@@ -29,7 +33,7 @@ class World {
         }, 200);
     }
 
-    checkCollisions() {
+    checkEnemyCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (enemy.isDead) return;
 
@@ -46,7 +50,7 @@ class World {
                     this.character.speedY = 15;
                 } else {
                     this.character.hit();
-                    this.statusBar.setPercentage(this.character.energy);
+                    this.statusBarHealth.setPercentage(this.character.energy);
                 }
             }
         });
@@ -59,14 +63,28 @@ class World {
         }
     }
 
+    checkCoinCollisions(){
+    this.level.coins = this.level.coins.filter((coin) => {
+        if (this.character.isColliding(coin)) {
+            this.coinsCounter++;
+            this.statusBarCoins.setPercentage(this.coinsCounter * 20);
+            return false;
+        }
+        return true;
+    });
+}
+
 
     draw() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addObjectsToMap(this.level.clouds);
+        this.addObjectsToMap(this.level.coins)
         this.ctx.translate(-this.camera_x, 0);
-        this.addToMap(this.statusBar);
+        this.addToMap(this.statusBarHealth);
+        this.addToMap(this.statusBarCoins);
+        this.addToMap(this.statusBarBottle);
         this.ctx.translate(this.camera_x, 0);
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
