@@ -34,8 +34,6 @@ class Character extends MovableObject {
     ];
 
     IMAGES_JUMPING = [
-        '../img/2_character_pepe/3_jump/J-31.png',
-        '../img/2_character_pepe/3_jump/J-32.png',
         '../img/2_character_pepe/3_jump/J-33.png',
         '../img/2_character_pepe/3_jump/J-34.png',
         '../img/2_character_pepe/3_jump/J-35.png',
@@ -69,16 +67,16 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
         this.applyGravity();
+        this.offset = { top: 120, left: 20, right: 20, bottom: 10 };
         this.animate();
     }
 
     animate() {
         setInterval(() => {
-            this.playAnimation(this.IMAGES_IDLE);
-            if(this.isDead()) {
+            if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
-            } else if(this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT);
+            } else if (!this.isAboveGround()) {
+                this.playAnimation(this.IMAGES_IDLE);
             }
         }, 1000);
 
@@ -99,20 +97,29 @@ class Character extends MovableObject {
 
             this.world.camera_x = -this.x + 100;
 
-            if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+            if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround()) {
                 this.jump();
             }
 
-            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+            if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround() && !this.isHurt()) {
                 this.playAnimation(this.IMAGES_WALKING)
             }
 
         }, 1000 / 10);
 
+        setInterval(() => {
+            if (this.isAboveGround() && !this.isHurt()) {
+                this.playAnimationOnce(this.IMAGES_JUMPING);
+            } else if (this.isHurt()) {
+                this.playAnimation(this.IMAGES_HURT);
+            }
+        }, 250);
     }
 
     jump() {
+        if (!this.isHurt()) {
+            this.playAnimationOnce(this.IMAGES_JUMPING);
+        }
         this.speedY = 30;
-        this.playAnimation(this.IMAGES_JUMPING);
     }
 }

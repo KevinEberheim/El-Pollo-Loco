@@ -5,12 +5,18 @@ class MovableObject extends DrawableObject {
     acceleration = 2.5;
     energy = 100;
     lastHit = 0;
+    prevY;
+    prevSpeedY
 
     applyGravity() {
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
+                this.prevY = this.y
+                this.prevSpeedY = this.speedY;
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
+                if (this.y > 140 && !this instanceof ThrowableObject ) { this.y = 140 };
+                console.log(this.y , this.speedY, this.prevY, this.prevSpeedY)
             }
         }, 1000 / 25);
     }
@@ -19,19 +25,19 @@ class MovableObject extends DrawableObject {
         if (this instanceof ThrowableObject) {
             return true;
         } else {
-        return this.y < 140;
+            return this.y < 140;
         }
     }
 
     isColliding(movableObject) {
-        return this.x + this.width > movableObject.x &&
-            this.y + this.height > movableObject.y &&
-            this.x < movableObject.x + movableObject.width &&
-            this.y < movableObject.y + movableObject.height;
+        return this.x + this.width - this.offset.right > movableObject.x + movableObject.offset.left &&
+            this.y + this.height - this.offset.bottom > movableObject.y + movableObject.offset.top &&
+            this.x + this.offset.left < movableObject.x + movableObject.width - movableObject.offset.right &&
+            this.y + this.offset.top < movableObject.y + movableObject.height - movableObject.offset.bottom;
     }
 
     hit() {
-        this.energy -= 1;
+        this.energy -= 1/6;
         if (this.energy < 0) {
             this.energy = 0;
         } else {
@@ -42,7 +48,7 @@ class MovableObject extends DrawableObject {
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit;
         timepassed = timepassed / 1000;
-        return this.energy < 100 && timepassed < 1; 
+        return this.energy < 100 && timepassed < 1;
     }
 
     isDead() {
@@ -58,9 +64,25 @@ class MovableObject extends DrawableObject {
     }
 
     playAnimation(images) {
+        if (this.currentAnimation !== images) {
+            this.currentAnimation = images;
+            this.currentImage = 0;
+        }
         let indexImage = this.currentImage % images.length;
         let path = images[indexImage];
         this.img = this.imageCache[path];
         this.currentImage++;
+    }
+
+    playAnimationOnce(images) {
+        if (this.currentAnimation !== images) {
+            this.currentAnimation = images;
+            this.currentImage = 0;
+        }
+        if (this.currentImage < images.length) {
+            let path = images[this.currentImage];
+            this.img = this.imageCache[path];
+            this.currentImage++;
+        }
     }
 }
