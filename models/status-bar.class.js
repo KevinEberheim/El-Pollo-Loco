@@ -45,56 +45,6 @@ class StatusBar extends DrawableObject {
         this.img = this.imageCache[path];
     }
 
-    // resolveImageIndex() {
-    //     if (this.persentage == 100) {
-    //         if (this.images == this.IMAGES_Health) {
-    //             return 5;
-    //         }
-    //         else {
-    //             return 0;
-    //         }
-    //     }
-    //     else if (this.persentage >= 80) {
-    //         if (this.images == this.IMAGES_Health) {
-    //             return 4;
-    //         }
-    //         else {
-    //             return 1;
-    //         }
-    //     }
-    //     else if (this.persentage >= 60) {
-    //         if (this.images == this.IMAGES_Health) {
-    //             return 3;
-    //         }
-    //         else {
-    //             return 2;
-    //         }
-    //     }
-    //     else if (this.persentage >= 40) {
-    //         if (this.images == this.IMAGES_Health) {
-    //             return 2;
-    //         }
-    //         else {
-    //             return 3;
-    //         }
-    //     }
-    //     else if (this.persentage >= 20) {
-    //         if (this.images == this.IMAGES_Health) {
-    //             return 1;
-    //         }
-    //         else {
-    //             return 4;
-    //         }
-    //     } else {
-    //         if (this.images == this.IMAGES_Health) {
-    //             return 0;
-    //         }
-    //         else {
-    //             return 5;
-    //         }
-    //     }
-    // }
-
     resolveImageIndex() {
         return Math.min(5, Math.floor(this.persentage / 20));
     }

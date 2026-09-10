@@ -5,6 +5,7 @@ class World {
     keyboard;
     camera_x = 0;
     coinsCounter = 0;
+    bottleCounter = 0;
     statusBarHealth = new StatusBar(10, 0, 'IMAGES_Health', 100);
     statusBarCoins = new StatusBar(10, 50, 'IMAGES_Coins', 0);
     statusBarBottle = new StatusBar(10, 100, 'IMAGES_Bottle', 0);
@@ -26,9 +27,11 @@ class World {
         setInterval(() => {
             this.checkEnemyCollisions();
             this.checkCoinCollisions();
+            this.checkBottleCollisions();
         }, 1000 / 60);
 
         setInterval(() => {
+            if(this.bottleCounter == 0){return}
             this.checkThrowObjects();
         }, 200);
     }
@@ -41,7 +44,7 @@ class World {
                 const enemyTop = enemy.y + enemy.offset.top;
                 const charBottom = this.character.y + this.character.height - this.character.offset.bottom;
                 const previousCharBottom = this.character.prevY + this.character.height - this.character.offset.bottom;
-                const isFalling = this.character.prevSpeedY  < 0;
+                const isFalling = this.character.prevSpeedY < 0;
                 const crossedEnemyTop = previousCharBottom < enemyTop && charBottom >= enemyTop;
                 const isJumpingOnTop = isFalling && crossedEnemyTop;
 
@@ -58,21 +61,34 @@ class World {
 
     checkThrowObjects() {
         if (this.keyboard.D) {
-            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+            let bottle = new ThrowableObject(this.character.x + 50, this.character.y + 120, this);
             this.throwableObjects.push(bottle);
+            this.bottleCounter--;
+            this.statusBarBottle.setPercentage(this.bottleCounter * 20);
         }
     }
 
-    checkCoinCollisions(){
-    this.level.coins = this.level.coins.filter((coin) => {
-        if (this.character.isColliding(coin)) {
-            this.coinsCounter++;
-            this.statusBarCoins.setPercentage(this.coinsCounter * 20);
-            return false;
-        }
-        return true;
-    });
-}
+    checkCoinCollisions() {
+        this.level.coins = this.level.coins.filter((coin) => {
+            if (this.character.isColliding(coin)) {
+                this.coinsCounter++;
+                this.statusBarCoins.setPercentage(this.coinsCounter * 20);
+                return false;
+            }
+            return true;
+        });
+    }
+
+    checkBottleCollisions() {
+        this.level.bottles = this.level.bottles.filter((bottle) => {
+            if (this.character.isColliding(bottle)) {
+                this.bottleCounter++;
+                this.statusBarBottle.setPercentage(this.bottleCounter * 20);
+                return false;
+            }
+            return true;
+        });
+    }
 
 
     draw() {
@@ -81,6 +97,7 @@ class World {
         this.addObjectsToMap(this.level.backgroundObjects);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.coins)
+        this.addObjectsToMap(this.level.bottles)
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBarHealth);
         this.addToMap(this.statusBarCoins);
