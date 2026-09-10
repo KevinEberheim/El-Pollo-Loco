@@ -15,8 +15,8 @@ class MovableObject extends DrawableObject {
                 this.prevSpeedY = this.speedY;
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
-                if (this.y > 140 && !(this instanceof ThrowableObject) ) { this.y = 140 };
-                console.log(this.y , this.speedY, this.prevY, this.prevSpeedY)
+                if (this.y > 140 && !(this instanceof ThrowableObject)) { this.y = 140 };
+                console.log(this.y, this.speedY, this.prevY, this.prevSpeedY)
             }
         }, 1000 / 25);
     }
@@ -37,7 +37,8 @@ class MovableObject extends DrawableObject {
     }
 
     hit() {
-        this.energy -= 1/6;
+        if (this.isHurt()) return;
+        this.energy -= 20;
         if (this.energy < 0) {
             this.energy = 0;
         } else {

@@ -15,7 +15,7 @@ class ThrowableObject extends MovableObject {
         '../img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
     ]
 
-    constructor(x, y ,world) {
+    constructor(x, y, world) {
         super().loadImage('../img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
         this.loadImages(this.IMAGES_ROTATE);
         this.loadImages(this.IMAGES_SPLASH);
@@ -32,17 +32,27 @@ class ThrowableObject extends MovableObject {
         this.applyGravity();
 
         let throwInterval = setInterval(() => {
-            if (!this.isAboveGround()) {
-                this.playAnimationOnce(this.IMAGES_SPLASH);
-                if (this.currentImage >= this.IMAGES_SPLASH.length) {
-                    clearInterval(throwInterval);
-                    this.removeFromWorld();
-                }
+            let endboss = this.world.level.enemies[this.world.level.enemies.length - 1];
+            let bossHitboxForBottle = { ...endboss, offset: { ...endboss.offset, left: 100 } };
+
+            if (this.isColliding(bossHitboxForBottle)) {
+                endboss.hit();
+                this.splashAndRemove(throwInterval);
+            } else if (!this.isAboveGround()) {
+                this.splashAndRemove(throwInterval);
             } else {
                 this.x += 10;
                 this.playAnimation(this.IMAGES_ROTATE);
             }
         }, 1000 / 25);
+    }
+
+    splashAndRemove(interval) {
+        this.playAnimationOnce(this.IMAGES_SPLASH);
+        if (this.currentImage >= this.IMAGES_SPLASH.length) {
+            clearInterval(interval);
+            this.removeFromWorld();
+        }
     }
 
     removeFromWorld() {
