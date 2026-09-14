@@ -1,0 +1,51 @@
+.game-wrapper {
+    position: relative;
+    width: 720px;
+    height: 480px;
+}
+
+.overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.background-cover{    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    background-image: url('../img/9_intro_outro_screens/start/startscreen_1.png');
+    background-size: contain;
+    background-position: top;
+    background-repeat: round;
+}
+
+.panel:first-child{
+    justify-content: flex-end;
+}
+
+.panel{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding-block: 8px;
+    padding-inline: 16px;
+}
+
+.panel-wrapper{
+    display: flex;
+    gap: 8px;
+}
+
+.panel-wrapper button{
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    background-color: orange;
+    border: none;
+    cursor: pointer;
+}

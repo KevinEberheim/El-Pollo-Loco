@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" translate="no">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/assets.css">
     <link rel="stylesheet" href="style.css">
     <title>El Pollo Loco</title>
     <script src="models/drawable-object.class.js"></script>
@@ -22,11 +24,35 @@
     <script src="levels/level1.js"></script>
     <script src="js/game.js"></script>
 </head>
+
 <body onload="init()">
-    <h1>El Pollo Loco</h1>
+    <div class="game-wrapper">
+        <canvas id="canvas" width="720" height="480">
+        </canvas>
+        <div class="overlay">
+            <div id="hud" class="background-cover">
+                <div class="panel">
+                    <div class="panel-wrapper">
+                        <button id="btnPlay"
+                            onclick="document.getElementById('hud').style.backgroundImage = 'none'">play</button>
+                        <button id="btnMute">mute</button>
+                        <button id="btnFullscreen">full</button>
+                    </div>
+                </div>
 
-    <canvas id="canvas" width="720" height="480">
-
-    </canvas>
+                <div class="panel">
+                    <div class="panel-wrapper">
+                        <button id="btnLeft">left</button>
+                        <button id="btnRight">right</button>
+                    </div>
+                    <div class="panel-wrapper">
+                        <button id="btnJump">jump</button>
+                        <button id="btnThrow">throw</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
