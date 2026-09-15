@@ -3,7 +3,7 @@ let ctx;
 let world;
 let keyboard;
 
-function init() {
+function initGame() {
     keyboard = new Keyboard();
     initLevel();
     canvas = document.getElementById("canvas");

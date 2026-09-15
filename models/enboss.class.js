@@ -100,7 +100,7 @@ class Endboss extends MovableObject {
 
     hit() {
         if (this.isHurt()) return;
-        this.energy -= 25;
+        this.energy -= 20;
         this.playAnimationOnce(this.IMAGES_Hurt);
         if (this.energy <= 0) {
             this.energy = 0;
