@@ -27,16 +27,16 @@
 </head>
 
 <body >
-    <div class="game-wrapper">
+    <div id="fullscreen" class="game-wrapper">
         <canvas id="canvas" width="720" height="480" class="dp-none">
         </canvas>
         <div class="overlay">
             <div id="hud" class="background-cover">
                 <div class="panel">
                     <div class="panel-wrapper">
-                        <button id="btnPlay" onclick="init()">play</button>
+                        <button id="btnPlay" onclick="init()" >play</button>
                         <button id="btnMute">mute</button>
-                        <button id="btnFullscreen">full</button>
+                        <button id="btnFullscreen" onclick="toggleFullscreen('fullscreen')">full</button>
                     </div>
                 </div>
 

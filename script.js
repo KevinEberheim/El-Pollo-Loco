@@ -1,6 +1,34 @@
-function init(){
+function init() {
     document.getElementById('hud').style.backgroundImage = 'none';
     document.getElementById('canvas').classList.remove('dp-none');
     document.getElementById('btnPlay').blur();
     initGame();
+}
+
+function toggleFullscreen(id) {
+    if (window.matchMedia('(display-mode: fullscreen)').matches) {
+        exitFullscreen();
+    } else {
+        enterFullscreen(document.getElementById(id));
+    }
+}
+
+function enterFullscreen(element) {
+    if (element.requestFullscreen) {
+        element.requestFullscreen();
+    } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+    } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+    }
+}
+
+function exitFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+    }
 }
