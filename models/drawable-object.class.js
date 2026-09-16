@@ -2,6 +2,7 @@ class DrawableObject {
     img;
     imageCache = {};
     currentImage = 0;
+    intervals = [];
     x = 100;
     y = 350;
     height = 80;
@@ -11,6 +12,17 @@ class DrawableObject {
         'left': 0,
         'right': 0,
         'bottom': 0
+    }
+
+    addInterval(fn, time) {
+        let id = setInterval(fn, time);
+        this.intervals.push(id);
+        return id;
+    }
+
+    clearAllIntervals() {
+        this.intervals.forEach(id => clearInterval(id));
+        this.intervals = [];
     }
 
     draw(ctx) {

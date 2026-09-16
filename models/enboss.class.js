@@ -61,15 +61,15 @@ class Endboss extends MovableObject {
     }
 
     animate() {
-        this.walkInterval = setInterval(() => {
+        this.walkInterval = this.addInterval(() => {
             if (!this.isAlerting && !this.hasAlerted && !this.isDead) {
                 this.moveLeft();
             }
         }, 1000 / 60)
 
-        this.animateInterval = setInterval(() => {
+        this.animateInterval = this.addInterval(() => {
             if (this.isDead) return;
-            let distance = this.x - world.character.x;
+            let distance = this.x - this.world.character.x;
 
             if (this.isAlerting) {
                 this.playAnimationOnce(this.IMAGES_Alert);

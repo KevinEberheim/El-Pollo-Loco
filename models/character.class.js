@@ -72,7 +72,7 @@ class Character extends MovableObject {
     }
 
     animate() {
-        setInterval(() => {
+        this.addInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
             } else if (!this.isAboveGround()) {
@@ -80,7 +80,7 @@ class Character extends MovableObject {
             }
         }, 1000);
 
-        setInterval(() => {
+        this.addInterval(() => {
             // this.walking_sound.pause();
             if (this.world.keyboard.LEFT && this.x > 0) {
                 this.speed = 25;
@@ -107,7 +107,7 @@ class Character extends MovableObject {
 
         }, 1000 / 10);
 
-        setInterval(() => {
+        this.addInterval(() => {
             if (this.isAboveGround() && !this.isHurt()) {
                 this.playAnimationOnce(this.IMAGES_JUMPING);
             } else if (this.isHurt()) {

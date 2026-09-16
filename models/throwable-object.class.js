@@ -30,16 +30,16 @@ class ThrowableObject extends MovableObject {
     throw() {
         this.speedY = 30;
         this.applyGravity();
-
-        let throwInterval = setInterval(() => {
-            let endboss = this.world.level.enemies[this.world.level.enemies.length - 1];
+        this.checkOfEndboss(this.world.endboss);
+        this.throwInterval = this.addInterval(() => {
+            let endboss = this.world.endboss;
             let bossHitboxForBottle = { ...endboss, offset: { ...endboss.offset, left: 100 } };
 
             if (this.isColliding(bossHitboxForBottle)) {
                 endboss.hit();
-                this.splashAndRemove(throwInterval);
+                this.splashAndRemove(this.throwInterval);
             } else if (!this.isAboveGround()) {
-                this.splashAndRemove(throwInterval);
+                this.splashAndRemove(this.throwInterval);
             } else {
                 this.x += 10;
                 this.playAnimation(this.IMAGES_ROTATE);
@@ -59,6 +59,18 @@ class ThrowableObject extends MovableObject {
         let index = this.world.throwableObjects.indexOf(this);
         if (index > -1) {
             this.world.throwableObjects.splice(index, 1);
+        }
+    }
+
+    checkOfEndboss(endboss) {
+        if (!endboss) {
+            if (!this.isAboveGround()) {
+                this.splashAndRemove();
+            } else {
+                this.x += 10;
+                this.playAnimation(this.IMAGES_ROTATE);
+            }
+            return;
         }
     }
 }

@@ -9,8 +9,11 @@ class World {
     statusBarHealthCharakter = new StatusBar(10, 0, 'IMAGES_Health_Character', 100);
     statusBarCoins = new StatusBar(10, 50, 'IMAGES_Coins', 0);
     statusBarBottle = new StatusBar(10, 100, 'IMAGES_Bottle', 0);
-    statusBarHealthEndboss = new StatusBar(500, 50, 'IMAGES_Health_Endboss', 100);
+    statusBarHealthEndboss;
+    endboss;
     throwableObjects = [];
+    worldIntervals = [];
+    gameOver = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -20,21 +23,28 @@ class World {
         this.run();
     }
 
+    addWorldInterval(fn, time) {
+        let id = setInterval(fn, time);
+        this.worldIntervals.push(id);
+        return id;
+    }
+
     setWorld() {
         this.character.world = this;
-        this.endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
+        this.totalCoins = this.level.coins.length;
     }
 
     run() {
-        setInterval(() => {
+        this.addWorldInterval(() => {
             this.checkEnemyCollisions();
             this.checkCoinCollisions();
             this.checkBottleCollisions();
-            this.checkEndbossHit()
+            this.checkEndbossHit();
+            this.checkGameOver();
         }, 1000 / 60);
 
-        setInterval(() => {
-            if(this.bottleCounter == 0){return}
+        this.addWorldInterval(() => {
+            if (this.bottleCounter == 0) { return }
             this.checkThrowObjects();
         }, 200);
     }
@@ -80,6 +90,10 @@ class World {
             }
             return true;
         });
+
+        if (!this.endboss && this.coinsCounter >= this.totalCoins) {
+            this.spawnEndboss();
+        }
     }
 
     checkBottleCollisions() {
@@ -93,12 +107,53 @@ class World {
         });
     }
 
-    checkEndbossHit() {
-    if (this.endboss.energy !== this.lastEndbossEnergy) {
-        this.statusBarHealthEndboss.setPercentage(this.endboss.energy);
-        this.lastEndbossEnergy = this.endboss.energy;
+    spawnEndboss() {
+        this.endboss = new Endboss();
+        this.endboss.world = this;
+        this.level.enemies.push(this.endboss);
+        this.statusBarHealthEndboss = new StatusBar(500, 50, 'IMAGES_Health_Endboss', 100);
     }
-}
+
+    checkEndbossHit() {
+        if (!this.endboss) return;
+        if (this.endboss.energy !== this.lastEndbossEnergy) {
+            this.statusBarHealthEndboss.setPercentage(this.endboss.energy);
+            this.lastEndbossEnergy = this.endboss.energy;
+        }
+    }
+
+    checkGameOver() {
+        if (this.gameOver) return;
+        if (this.character.isDead()) {
+            this.gameOver = true;
+            this.destroy();
+            this.showEndScreen(false);
+        } else if (this.endboss && this.endboss.energy <= 0) {
+            this.gameOver = true;
+            this.destroy();
+            this.showEndScreen(true);
+        }
+    }
+
+    showEndScreen(won) {
+        let overlay = document.getElementById('endscreen');
+        let img = document.getElementById('endscreenImg');
+        img.src = 'img/You won, you lost/Game over A.png';
+        overlay.classList.remove('dp-none');
+        setTimeout(() => {
+            img.src = won
+                ? 'img/You won, you lost/You Win A.png'
+                : 'img/You won, you lost/You lost.png';
+        }, 1500);
+    }
+
+    destroy() {
+        this.worldIntervals.forEach(id => clearInterval(id));
+        this.worldIntervals = [];
+        this.character.clearAllIntervals();
+        this.level.enemies.forEach(enemy => enemy.clearAllIntervals());
+        this.throwableObjects.forEach(t => t.clearAllIntervals());
+    }
 
 
     draw() {
@@ -112,14 +167,16 @@ class World {
         this.addToMap(this.statusBarHealthCharakter);
         this.addToMap(this.statusBarCoins);
         this.addToMap(this.statusBarBottle);
-        this.addToMap(this.statusBarHealthEndboss);
+        if (this.statusBarHealthEndboss) this.addToMap(this.statusBarHealthEndboss);
         this.ctx.translate(this.camera_x, 0);
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.throwableObjects);
         this.ctx.translate(-this.camera_x, 0);
 
-        requestAnimationFrame(() => this.draw());
+        if (!this.gameOver) {
+            requestAnimationFrame(() => this.draw());
+        }
     }
 
     addObjectsToMap(objects) {

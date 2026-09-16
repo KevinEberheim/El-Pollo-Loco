@@ -26,15 +26,22 @@
     <script src="script.js"></script>
 </head>
 
-<body >
+<body>
     <div id="fullscreen" class="game-wrapper">
         <canvas id="canvas" width="720" height="480" class="dp-none">
         </canvas>
+        <div id="endscreen" class="endscreen dp-none">
+            <img id="endscreenImg" src="" alt="">
+            <div class="endscreen-buttons">
+                <button id="btnRestart" onclick="restartGame()">restart</button>
+                <button id="btnStart" onclick="goToStartScreen()">start screen</button>
+            </div>
+        </div>
         <div class="overlay">
             <div id="hud" class="background-cover">
                 <div class="panel">
                     <div class="panel-wrapper">
-                        <button id="btnPlay" onclick="init()" >play</button>
+                        <button id="btnPlay" onclick="init()">play</button>
                         <button id="btnMute">mute</button>
                         <button id="btnFullscreen" onclick="toggleFullscreen('fullscreen')">full</button>
                     </div>

@@ -32,3 +32,14 @@ function exitFullscreen() {
         document.msExitFullscreen();
     }
 }
+
+function restartGame() {
+    document.getElementById('endscreen').classList.add('dp-none');
+    initGame();
+}
+
+function goToStartScreen() {
+    document.getElementById('endscreen').classList.add('dp-none');
+    document.getElementById('canvas').classList.add('dp-none');
+    document.getElementById('hud').style.backgroundImage = "url('../img/9_intro_outro_screens/start/startscreen_1.png')";
+}
