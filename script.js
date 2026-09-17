@@ -6,11 +6,12 @@ function init() {
 }
 
 function toggleFullscreen(id) {
-    if (window.matchMedia('(display-mode: fullscreen)').matches) {
+    if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
         exitFullscreen();
     } else {
         enterFullscreen(document.getElementById(id));
     }
+    document.getElementById('btnFullscreen').blur();
 }
 
 function enterFullscreen(element) {
@@ -41,5 +42,5 @@ function restartGame() {
 function goToStartScreen() {
     document.getElementById('endscreen').classList.add('dp-none');
     document.getElementById('canvas').classList.add('dp-none');
-    document.getElementById('hud').style.backgroundImage = "url('../img/9_intro_outro_screens/start/startscreen_1.png')";
+    document.getElementById('hud').style.backgroundImage = "url('img/9_intro_outro_screens/start/startscreen_1.png')";
 }

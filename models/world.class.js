@@ -126,10 +126,14 @@ class World {
         if (this.gameOver) return;
         if (this.character.isDead()) {
             this.gameOver = true;
+            setTimeout(() => {
+            this.stopRendering = true;
             this.destroy();
             this.showEndScreen(false);
+            }, 2000);
         } else if (this.endboss && this.endboss.energy <= 0) {
             this.gameOver = true;
+            this.stopRendering = true;
             this.destroy();
             this.showEndScreen(true);
         }
@@ -174,7 +178,7 @@ class World {
         this.addObjectsToMap(this.throwableObjects);
         this.ctx.translate(-this.camera_x, 0);
 
-        if (!this.gameOver) {
+        if (!this.stopRendering) {
             requestAnimationFrame(() => this.draw());
         }
     }
