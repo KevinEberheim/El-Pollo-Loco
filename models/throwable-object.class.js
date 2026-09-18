@@ -30,13 +30,24 @@ class ThrowableObject extends MovableObject {
     throw() {
         this.speedY = 30;
         this.applyGravity();
-        this.checkOfEndboss(this.world.endboss);
         this.throwInterval = this.addInterval(() => {
             let endboss = this.world.endboss;
-            let bossHitboxForBottle = { ...endboss, offset: { ...endboss.offset, left: 100 } };
+            let hitsBoss = false;
 
-            if (this.isColliding(bossHitboxForBottle)) {
+            if (endboss) {
+                let bossHitboxForBottle = { ...endboss, offset: { ...endboss.offset, left: 100 } };
+                hitsBoss = this.isColliding(bossHitboxForBottle);
+            }
+
+            let hitChicken = this.world.level.enemies.find(
+                enemy => enemy.constructor === Chicken && !enemy.isDead && this.isColliding(enemy)
+            );
+
+            if (hitsBoss) {
                 endboss.hit();
+                this.splashAndRemove(this.throwInterval);
+            } else if (hitChicken) {
+                hitChicken.kill();
                 this.splashAndRemove(this.throwInterval);
             } else if (!this.isAboveGround()) {
                 this.splashAndRemove(this.throwInterval);
@@ -59,18 +70,6 @@ class ThrowableObject extends MovableObject {
         let index = this.world.throwableObjects.indexOf(this);
         if (index > -1) {
             this.world.throwableObjects.splice(index, 1);
-        }
-    }
-
-    checkOfEndboss(endboss) {
-        if (!endboss) {
-            if (!this.isAboveGround()) {
-                this.splashAndRemove();
-            } else {
-                this.x += 10;
-                this.playAnimation(this.IMAGES_ROTATE);
-            }
-            return;
         }
     }
 }

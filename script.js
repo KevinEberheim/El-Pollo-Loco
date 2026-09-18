@@ -44,3 +44,9 @@ function goToStartScreen() {
     document.getElementById('canvas').classList.add('dp-none');
     document.getElementById('hud').style.backgroundImage = "url('img/9_intro_outro_screens/start/startscreen_1.png')";
 }
+
+function switchSoundOnOff() {
+    SoundManager.toggle();
+    document.getElementById('btnMute').blur();
+    SoundManager.updateButton();
+}

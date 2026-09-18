@@ -23,6 +23,11 @@ class StatusBar extends DrawableObject {
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/40.png',
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/60.png',
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/80.png',
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png',
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/20.png',
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/40.png',
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/60.png',
+        'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/80.png',
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/orange/100.png'
     ]
 
@@ -57,6 +62,6 @@ class StatusBar extends DrawableObject {
     }
 
     resolveImageIndex() {
-        return Math.min(5, Math.floor(this.persentage / 20));
+        return Math.min(10, Math.floor(this.persentage / 20));
     }
 }

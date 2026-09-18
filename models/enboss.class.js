@@ -45,6 +45,7 @@ class Endboss extends MovableObject {
 
     isDead = false;
     energy = 100;
+    hitSound = SoundManager.create('audio/chickenHit.mp3', 0.6);
 
 
     constructor() {
@@ -101,6 +102,7 @@ class Endboss extends MovableObject {
     hit() {
         if (this.isHurt()) return;
         this.energy -= 20;
+        SoundManager.play(this.hitSound);
         this.playAnimationOnce(this.IMAGES_Hurt);
         if (this.energy <= 0) {
             this.energy = 0;

@@ -6,10 +6,12 @@ class World {
     camera_x = 0;
     coinsCounter = 0;
     bottleCounter = 0;
+    lastThrowTime = 0;
     statusBarHealthCharakter = new StatusBar(10, 0, 'IMAGES_Health_Character', 100);
     statusBarCoins = new StatusBar(10, 50, 'IMAGES_Coins', 0);
     statusBarBottle = new StatusBar(10, 100, 'IMAGES_Bottle', 0);
     statusBarHealthEndboss;
+    collectSound = SoundManager.create('audio/collect.mp3', 0.4);
     endboss;
     throwableObjects = [];
     worldIntervals = [];
@@ -46,7 +48,7 @@ class World {
         this.addWorldInterval(() => {
             if (this.bottleCounter == 0) { return }
             this.checkThrowObjects();
-        }, 200);
+        }, 1000 / 20);
     }
 
     checkEnemyCollisions() {
@@ -73,7 +75,9 @@ class World {
     }
 
     checkThrowObjects() {
-        if (this.keyboard.D) {
+        let now = Date.now();
+        if (this.keyboard.D && now - this.lastThrowTime >= 1000) {
+            this.lastThrowTime = now;
             let bottle = new ThrowableObject(this.character.x + 50, this.character.y + 120, this);
             this.throwableObjects.push(bottle);
             this.bottleCounter--;
@@ -86,6 +90,7 @@ class World {
             if (this.character.isColliding(coin)) {
                 this.coinsCounter++;
                 this.statusBarCoins.setPercentage(this.coinsCounter * 20);
+                SoundManager.play(this.collectSound);
                 return false;
             }
             return true;
@@ -127,15 +132,17 @@ class World {
         if (this.character.isDead()) {
             this.gameOver = true;
             setTimeout(() => {
-            this.stopRendering = true;
-            this.destroy();
-            this.showEndScreen(false);
+                this.stopRendering = true;
+                this.destroy();
+                this.showEndScreen(false);
             }, 2000);
         } else if (this.endboss && this.endboss.energy <= 0) {
             this.gameOver = true;
-            this.stopRendering = true;
-            this.destroy();
-            this.showEndScreen(true);
+            setTimeout(() => {
+                this.stopRendering = true;
+                this.destroy();
+                this.showEndScreen(true);
+            }, 2000);
         }
     }
 
