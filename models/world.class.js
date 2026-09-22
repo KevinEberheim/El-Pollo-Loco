@@ -11,7 +11,10 @@ class World {
     statusBarCoins = new StatusBar(10, 50, 'IMAGES_Coins', 0);
     statusBarBottle = new StatusBar(10, 100, 'IMAGES_Bottle', 0);
     statusBarHealthEndboss;
-    collectSound = SoundManager.create('audio/collect.mp3', 0.4);
+    coinCollectSound = SoundManager.create('audio/coinCollect.mp3', 0.4);
+    bottleCollectSound = SoundManager.create('audio/itemCollect.mp3', 0.4);
+    loseSound = SoundManager.create('audio/gameOverFail.mp3', 0.4);
+    winSound = SoundManager.create('audio/gameOverWin.mp3', 0.4);
     endboss;
     throwableObjects = [];
     worldIntervals = [];
@@ -90,7 +93,7 @@ class World {
             if (this.character.isColliding(coin)) {
                 this.coinsCounter++;
                 this.statusBarCoins.setPercentage(this.coinsCounter * 20);
-                SoundManager.play(this.collectSound);
+                SoundManager.play(this.coinCollectSound);
                 return false;
             }
             return true;
@@ -106,6 +109,7 @@ class World {
             if (this.character.isColliding(bottle)) {
                 this.bottleCounter++;
                 this.statusBarBottle.setPercentage(this.bottleCounter * 20);
+                SoundManager.play(this.bottleCollectSound);
                 return false;
             }
             return true;
@@ -117,6 +121,7 @@ class World {
         this.endboss.world = this;
         this.level.enemies.push(this.endboss);
         this.statusBarHealthEndboss = new StatusBar(500, 50, 'IMAGES_Health_Endboss', 100);
+        playMusic(endbossMusic);
     }
 
     checkEndbossHit() {
@@ -132,17 +137,22 @@ class World {
         if (this.character.isDead()) {
             this.gameOver = true;
             setTimeout(() => {
+                SoundManager.stop(endbossMusic);
+                SoundManager.stop(gameStartMusic);
                 this.stopRendering = true;
                 this.destroy();
                 this.showEndScreen(false);
-            }, 2000);
+                SoundManager.play(this.loseSound)
+            }, 1500);
         } else if (this.endboss && this.endboss.energy <= 0) {
             this.gameOver = true;
             setTimeout(() => {
+                SoundManager.stop(endbossMusic);
                 this.stopRendering = true;
                 this.destroy();
                 this.showEndScreen(true);
-            }, 2000);
+                SoundManager.play(this.winSound)
+            }, 500);
         }
     }
 

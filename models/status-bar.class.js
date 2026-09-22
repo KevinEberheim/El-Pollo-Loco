@@ -56,12 +56,12 @@ class StatusBar extends DrawableObject {
     }
 
     setPercentage(startPercentage) {
-        this.persentage = startPercentage;
+        this.persentage = Math.max(0, Math.min(100, startPercentage));
         let path = this.images[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
 
     resolveImageIndex() {
-        return Math.min(10, Math.floor(this.persentage / 20));
+        return Math.min(this.images.length - 1, Math.floor(this.persentage / 20));
     }
 }

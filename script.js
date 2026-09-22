@@ -1,7 +1,17 @@
+const startScreenMusic = SoundManager.create('audio/startScreen.mp3', 0.1, true);
+const gameStartMusic = SoundManager.create('audio/gameStart.mp3', 0.1, true);
+const endbossMusic = SoundManager.create('audio/endbossArrived.mp3', 0.1, true);
+
+function playMusic(track) {
+    [startScreenMusic, gameStartMusic, endbossMusic].forEach(SoundManager.stop);
+    SoundManager.play(track);
+}
+
 function init() {
     document.getElementById('hud').style.backgroundImage = 'none';
     document.getElementById('canvas').classList.remove('dp-none');
     document.getElementById('btnPlay').blur();
+    playMusic(gameStartMusic);
     initGame();
 }
 
@@ -36,6 +46,7 @@ function exitFullscreen() {
 
 function restartGame() {
     document.getElementById('endscreen').classList.add('dp-none');
+    playMusic(gameStartMusic);
     initGame();
 }
 
@@ -43,6 +54,7 @@ function goToStartScreen() {
     document.getElementById('endscreen').classList.add('dp-none');
     document.getElementById('canvas').classList.add('dp-none');
     document.getElementById('hud').style.backgroundImage = "url('img/9_intro_outro_screens/start/startscreen_1.png')";
+    playMusic(startScreenMusic)
 }
 
 function switchSoundOnOff() {

@@ -16,6 +16,11 @@ class SoundManager {
         audio.play();
     }
 
+    static stop(audio) {
+        audio.pause();
+        audio.currentTime = 0;
+    }
+
     static toggle() {
         SoundManager.muted = !SoundManager.muted;
         localStorage.setItem('muted', SoundManager.muted);

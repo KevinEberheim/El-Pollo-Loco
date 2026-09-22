@@ -45,7 +45,8 @@ class Endboss extends MovableObject {
 
     isDead = false;
     energy = 100;
-    hitSound = SoundManager.create('audio/chickenHit.mp3', 0.6);
+    hitSound = SoundManager.create('audio/chickenHit.mp3', 0.4);
+    deathSound = SoundManager.create('audio/chickenDeath.mp3', 0.4);
 
 
     constructor() {
@@ -57,7 +58,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_Dead);
         this.offset.left = -50
         this.x = 2500;
-        this.speed = 0.15 + Math.random() * 0.5;
+        this.speed = 2.5 + Math.random() * 0.5;
         this.animate();
     }
 
@@ -90,7 +91,7 @@ class Endboss extends MovableObject {
                 this.playAnimation(this.IMAGES_Attack);
             }
 
-        }, 1000 / 5);
+        }, 1000 / 15);
     }
 
     alertIsFinished() {
@@ -102,9 +103,12 @@ class Endboss extends MovableObject {
     hit() {
         if (this.isHurt()) return;
         this.energy -= 20;
-        SoundManager.play(this.hitSound);
-        this.playAnimationOnce(this.IMAGES_Hurt);
-        if (this.energy <= 0) {
+        if (this.energy >= 20) {
+            SoundManager.play(this.hitSound);
+            this.playAnimationOnce(this.IMAGES_Hurt);
+        }
+        if (this.energy < 20) {
+            SoundManager.play(this.deathSound);
             this.energy = 0;
             this.kill();
         } else {
@@ -121,11 +125,8 @@ class Endboss extends MovableObject {
     kill() {
         this.isDead = true;
         this.speed = 0;
-        this.playAnimationOnce(this.IMAGES_Dead)
-        setTimeout(() => {
-            clearInterval(this.walkInterval);
-            clearInterval(this.animateInterval);
-        }, 500);
-        this.loadImage('img/4_enemie_boss_chicken/5_dead/G26.png')        
+        clearInterval(this.walkInterval);
+        clearInterval(this.animateInterval);
+        this.deathIntervall = this.addInterval(() => { this.playAnimationOnce(this.IMAGES_Dead) }, 100)
     }
 }

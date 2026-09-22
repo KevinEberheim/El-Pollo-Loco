@@ -12,6 +12,7 @@ class Chicken extends MovableObject {
     isDead = false;
     walkInterval;
     animInterval;
+    deathSound = SoundManager.create('audio/chickenDeath.mp3', 0.4);
 
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
@@ -34,6 +35,7 @@ class Chicken extends MovableObject {
     }
 
     kill() {
+        SoundManager.play(this.deathSound)
         this.isDead = true;
         this.speed = 0;
         this.loadImage(this.IMAGES_DEAD[0]);

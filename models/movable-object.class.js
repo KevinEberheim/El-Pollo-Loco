@@ -37,12 +37,8 @@ class MovableObject extends DrawableObject {
 
     hit() {
         if (this.isHurt()) return;
-        this.energy -= 20;
-        if (this.energy < 0) {
-            this.energy = 0;
-        } else {
-            this.lastHit = new Date().getTime();
-        }
+        this.energy = Math.max(0, this.energy - 20);
+        this.lastHit = new Date().getTime();
     }
 
     isHurt() {
@@ -52,7 +48,7 @@ class MovableObject extends DrawableObject {
     }
 
     isDead() {
-        return this.energy == 0;
+        return this.energy <= 0;
     }
 
     moveRight() {

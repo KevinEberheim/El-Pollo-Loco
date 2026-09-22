@@ -31,6 +31,10 @@ class ThrowableObject extends MovableObject {
         this.speedY = 30;
         this.applyGravity();
         this.throwInterval = this.addInterval(() => {
+            if (this.world.gameOver) {
+                this.splashAndRemove(this.throwInterval);
+                return;
+            }
             let endboss = this.world.endboss;
             let hitsBoss = false;
 
