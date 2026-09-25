@@ -89,3 +89,65 @@ body{
     cursor: pointer;
     font-weight: bold;
 }
+
+
+.helpscreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    color: white;
+}
+
+.help-content {
+    max-width: 100%;
+    text-align: left;
+}
+
+.help-header{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.help-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+}
+
+.help-item {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    text-align: left;
+    font-size: 16px;
+}
+
+.help-item img {
+    min-width: 80px;
+    height: 80px;
+    object-fit: cover;
+    object-position: bottom;
+    padding: 8px;
+}
+
+.help-item:nth-child(-n+2) img {
+    height: 100px;
+}
+
+.help-content button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    background-color: orange;
+    cursor: pointer;
+    font-weight: bold;
+}

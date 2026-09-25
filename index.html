@@ -40,11 +40,51 @@
                 <button id="btnStart" onclick="goToStartScreen()">start screen</button>
             </div>
         </div>
+        <div id="helpscreen" class="helpscreen dp-none">
+            <div class="help-content">
+                <div class="help-header">
+                    <h2>How to Play</h2>
+                    <button id="btnCloseHelp" onclick="toggleHelp()">close</button>
+                </div>
+                <div class="help-gallery">
+                    <div class="help-item">
+                        <img src="img/2_character_pepe/2_walk/W-21.png" alt="Run">
+                        <p><strong>Run</strong><br>Arrow keys left/right or "left"/"right" buttons</p>
+                    </div>
+                    <div class="help-item">
+                        <img src="img/2_character_pepe/3_jump/J-33.png" alt="Jump">
+                        <p><strong>Jump</strong><br>Spacebar/arrow up or "jump" button</p>
+                    </div>
+                    <div class="help-item">
+                        <img src="img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png" alt="Throw">
+                        <p><strong>Throw</strong><br>Key D or "throw" button</p>
+                    </div>
+                    <div class="help-item">
+                        <img src="img/8_coin/coin_1.png" alt="Coins">
+                        <p><strong>Coins</strong><br>Collect all coins to summon the Endboss</p>
+                    </div>
+                    <div class="help-item">
+                        <img src="img/3_enemies_chicken/chicken_normal/1_walk/1_w.png" alt="Normal chicken">
+                        <p><strong>Normal Chicken</strong><br>Jump on it or hit it with a bottle</p>
+                    </div>
+                    <div class="help-item">
+                        <img src="img/3_enemies_chicken/chicken_small/1_walk/1_w.png" alt="Small chicken">
+                        <p><strong>Small Chicken</strong><br>Can only be defeated by jumping on it</p>
+                    </div>
+                    <div class="help-item">
+                        <img src="img/4_enemie_boss_chicken/2_alert/G5.png" alt="Endboss">
+                        <p><strong>Endboss</strong><br>Appears once all coins are collected; hit it with bottles to
+                            defeat it</p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="overlay">
             <div id="hud" class="background-cover">
                 <div class="panel">
                     <div class="panel-wrapper">
                         <button id="btnPlay" onclick="init()">play</button>
+                        <button id="btnHelp" onclick="toggleHelp()">help</button>
                         <button id="btnMute" onclick="switchSoundOnOff()">mute</button>
                         <button id="btnFullscreen" onclick="toggleFullscreen('fullscreen')">full</button>
                     </div>

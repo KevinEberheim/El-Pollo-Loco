@@ -62,3 +62,8 @@ function switchSoundOnOff() {
     document.getElementById('btnMute').blur();
     SoundManager.updateButton();
 }
+
+function toggleHelp() {
+    document.getElementById('helpscreen').classList.toggle('dp-none');
+    document.getElementById('btnHelp').blur();
+}
