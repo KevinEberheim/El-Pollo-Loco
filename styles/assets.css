@@ -6,6 +6,7 @@ body {
     position: relative;
     width: 720px;
     height: 480px;
+    container-type: size;
 }
 
 .overlay {
@@ -125,32 +126,39 @@ body {
     justify-content: center;
     z-index: 10;
     color: white;
+    font-size: clamp(16px, 3.2cqh, 40px);
+    overflow-y: auto;
 }
 
 .help-content {
-    max-width: 100%;
+    width: 100%;
+    padding: 3cqh 4cqw;
     text-align: left;
+}
+
+.help-content h2 {
+    font-size: 1.6em;
 }
 
 .help-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
 }
 
 .help-gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 16px;
-    margin: 16px 0;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5cqh 3cqw;
+    margin: 2cqh 0 0;
 }
 
 .help-item {
     display: flex;
-    gap: 16px;
+    gap: 2cqw;
     align-items: center;
     text-align: left;
-    font-size: 16px;
 }
 
 .help-item p {
@@ -158,9 +166,10 @@ body {
 }
 
 .help-item .inline-icon {
-    width: 24px;
-    height: 24px;
-    padding: 6px;
+    width: 1.8em;
+    height: 1.8em;
+    min-width: 0;
+    padding: 0.4em;
     border-radius: 50%;
     background-color: orange;
     vertical-align: middle;
@@ -168,22 +177,23 @@ body {
 }
 
 .help-item>img {
-    min-width: 80px;
-    height: 80px;
+    width: 15cqh;
+    min-width: 15cqh;
+    height: 15cqh;
     object-fit: cover;
     object-position: bottom;
-    padding: 8px;
+    padding: 0.5cqh;
 }
 
 .help-item:nth-child(-n+2)>img {
-    height: 100px;
+    height: 18cqh;
 }
 
 .help-content button {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 5px;
+    padding: 0.4em;
     border-radius: 8px;
     border: none;
     background-color: orange;
