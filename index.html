@@ -29,35 +29,45 @@
     <script src="script.js"></script>
 </head>
 
-<body>
+<body onload="bindGlobalEvents()">
     <div id="fullscreen" class="game-wrapper">
         <canvas id="canvas" width="720" height="480" class="dp-none">
         </canvas>
         <div id="endscreen" class="endscreen dp-none">
             <img id="endscreenImg" src="" alt="">
             <div class="endscreen-buttons">
-                <button id="btnRestart" onclick="restartGame()">restart</button>
-                <button id="btnStart" onclick="goToStartScreen()">start screen</button>
+                <button id="btnRestart" onclick="restartGame()"><img src="img/assets/replay.svg"
+                        alt="Replay-Icon"></button>
+                <button id="btnStart" onclick="goToStartScreen()"><img src="img/assets/homescreen.svg"
+                        alt="Homescreen-Icon"></button>
             </div>
         </div>
         <div id="helpscreen" class="helpscreen dp-none">
             <div class="help-content">
                 <div class="help-header">
                     <h2>How to Play</h2>
-                    <button id="btnCloseHelp" onclick="toggleHelp()">close</button>
+                    <button id="btnCloseHelp" onclick="toggleHelp()"><img src="img/assets/close.svg"
+                            alt="Close-Icon"></button>
                 </div>
                 <div class="help-gallery">
                     <div class="help-item">
                         <img src="img/2_character_pepe/2_walk/W-21.png" alt="Run">
-                        <p><strong>Run</strong><br>Arrow keys left/right or "left"/"right" buttons</p>
+                        <p><strong>Run</strong><br>Arrow keys left/right or
+                            <img class="inline-icon" src="img/assets/left.svg" alt="Left button">
+                            <img class="inline-icon" src="img/assets/right.svg" alt="Right button">
+                        </p>
                     </div>
                     <div class="help-item">
                         <img src="img/2_character_pepe/3_jump/J-33.png" alt="Jump">
-                        <p><strong>Jump</strong><br>Spacebar/arrow up or "jump" button</p>
+                        <p><strong>Jump</strong><br>Spacebar/arrow up or
+                            <img class="inline-icon" src="img/assets/up.svg" alt="Jump button">
+                        </p>
                     </div>
                     <div class="help-item">
                         <img src="img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png" alt="Throw">
-                        <p><strong>Throw</strong><br>Key D or "throw" button</p>
+                        <p><strong>Throw</strong><br>Key D or
+                            <img class="inline-icon throwArrow" src="img/assets/throw.svg" alt="Throw button">
+                        </p>
                     </div>
                     <div class="help-item">
                         <img src="img/8_coin/coin_1.png" alt="Coins">
@@ -83,25 +93,35 @@
             <div id="hud" class="background-cover">
                 <div class="panel">
                     <div class="panel-wrapper">
-                        <button id="btnPlay" onclick="init()">play</button>
-                        <button id="btnHelp" onclick="toggleHelp()">help</button>
-                        <button id="btnMute" onclick="switchSoundOnOff()">mute</button>
-                        <button id="btnFullscreen" onclick="toggleFullscreen('fullscreen')">full</button>
+                        <button id="btnPlay" onclick="onPlayClick()"><img id="btnPlayImg" src="img/assets/play.svg"
+                                alt="Play-Icon"></button>
+                        <button id="btnPause" onclick="togglePause()"><img src="img/assets/pause.svg"
+                                alt="Pause-Icon"></button>
+                        <button id="btnHelp" onclick="toggleHelp()"><img src="img/assets/help.svg"
+                                alt="Help-Icon"></button>
+                        <button id="btnMute" onclick="switchSoundOnOff()"><img id="btnMuteImg"
+                                src="img/assets/volume.svg" alt="Volume-Icon"></button>
+                        <button id="btnFullscreen" onclick="toggleFullscreen('fullscreen')"><img id="btnFullscreenImg"
+                                src="img/assets/fullscreen_open.svg" alt="Fullscreen-Icon"></button>
                     </div>
                 </div>
 
-                <div class="panel">
+                <div class="panel touch-controls">
                     <div class="panel-wrapper">
-                        <button id="btnLeft">left</button>
-                        <button id="btnRight">right</button>
+                        <button id="btnLeft"><img src="img/assets/left.svg" alt="ArrowLeft-Icon"></button>
+                        <button id="btnRight"><img src="img/assets/right.svg" alt="ArrowRight-Icon"></button>
                     </div>
                     <div class="panel-wrapper">
-                        <button id="btnJump">jump</button>
-                        <button id="btnThrow">throw</button>
+                        <button id="btnJump"><img src="img/assets/up.svg" alt="ArrowUp-Icon"></button>
+                        <button id="btnThrow"><img class="throwArrow" src="img/assets/throw.svg"
+                                alt="ArrowCurved-Icon"></button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div id="rotateHint" class="rotate-hint">
+        <p>Please rotate your device to landscape mode</p>
     </div>
 </body>
 

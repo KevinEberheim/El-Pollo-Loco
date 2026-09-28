@@ -1,4 +1,5 @@
 class DrawableObject {
+    static paused = false;
     img;
     imageCache = {};
     currentImage = 0;
@@ -15,7 +16,9 @@ class DrawableObject {
     }
 
     addInterval(fn, time) {
-        let id = setInterval(fn, time);
+        let id = setInterval(() => {
+            if (!DrawableObject.paused) fn();
+        }, time);
         this.intervals.push(id);
         return id;
     }

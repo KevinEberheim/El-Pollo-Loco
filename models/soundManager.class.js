@@ -29,6 +29,22 @@ class SoundManager {
     }
 
     static updateButton() {
-        document.getElementById('btnMute').textContent = SoundManager.muted ? 'unmute' : 'mute';
+        document.getElementById('btnMuteImg').src = SoundManager.muted
+            ? 'img/assets/no_sound.svg'
+            : 'img/assets/volume.svg';
+    }
+
+    static pauseAll() {
+        SoundManager.sounds.forEach(s => {
+            s.wasPlaying = !s.paused;
+            if (!s.paused) s.pause();
+        });
+    }
+
+    static resumeAll() {
+        SoundManager.sounds.forEach(s => {
+            if (s.wasPlaying) s.play();
+            s.wasPlaying = false;
+        });
     }
 }

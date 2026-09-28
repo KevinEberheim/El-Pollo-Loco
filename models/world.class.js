@@ -29,7 +29,9 @@ class World {
     }
 
     addWorldInterval(fn, time) {
-        let id = setInterval(fn, time);
+        let id = setInterval(() => {
+            if (!DrawableObject.paused) fn();
+        }, time);
         this.worldIntervals.push(id);
         return id;
     }

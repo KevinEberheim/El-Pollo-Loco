@@ -11,7 +11,7 @@ class Keyboard {
         this.bindBtsPressEvents();
     }
 
-    bindBtsPressEvents(){
+    bindBtsPressEvents() {
         document.getElementById('btnLeft').addEventListener('touchstart', (e) => {
             e.preventDefault();
             this.LEFT = true;
@@ -48,7 +48,6 @@ class Keyboard {
             this.D = false;
         });
     }
-
 
     bindKeyPressEvents() {
         window.addEventListener("keydown", (e) => {
@@ -92,6 +91,10 @@ class Keyboard {
                 this.D = false;
             }
         });
+    }
+
+    reset() {
+        this.LEFT = this.RIGHT = this.SPACE = this.UP = this.DOWN = this.D = false;
     }
 
 }
