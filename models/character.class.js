@@ -79,20 +79,21 @@ class Character extends MovableObject {
     animate() {
 
         this.addInterval(() => {
-            if (this.isDead()) return;
+            if (this.world.gameOver) return;
             else if (!this.isAboveGround() && !(this.world.keyboard.LEFT || this.world.keyboard.RIGHT)) {
                 this.playAnimationOnce(this.IMAGES_IDLE);
             }
         }, 500);
 
         this.addInterval(() => {
+            if (this.world.gameOver) return;
             if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround() && !this.isHurt()) {
                 this.playAnimation(this.IMAGES_WALKING)
             }
         }, 50)
 
         this.addInterval(() => {
-            if (this.isDead()) return;
+            if (this.world.gameOver) return;
 
             if (this.world.keyboard.LEFT && this.x > 0) {
                 this.moveLeft();

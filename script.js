@@ -38,6 +38,7 @@ function playMusic(track) {
 }
 
 function init() {
+    document.getElementById('impressumLink').classList.add('dp-none');
     document.getElementById('hud').style.backgroundImage = 'none';
     document.getElementById('canvas').classList.remove('dp-none');
     document.getElementById('btnPlay').blur();
@@ -84,6 +85,7 @@ function restartGame() {
 function goToStartScreen() {
     document.getElementById('endscreen').classList.add('dp-none');
     document.getElementById('canvas').classList.add('dp-none');
+    document.getElementById('impressumLink').classList.remove('dp-none');
     document.getElementById('hud').style.backgroundImage = "url('img/9_intro_outro_screens/start/startscreen_1.png')";
     setPlayIcon(true);
     playMusic(startScreenMusic)

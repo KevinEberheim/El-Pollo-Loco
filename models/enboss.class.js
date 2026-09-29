@@ -70,7 +70,7 @@ class Endboss extends MovableObject {
         }, 1000 / 60)
 
         this.animateInterval = this.addInterval(() => {
-            if (this.isDead) return;
+            if (this.isDead || this.world.character.isDead()) return;
             let distance = this.x - this.world.character.x;
 
             if (this.isAlerting) {
