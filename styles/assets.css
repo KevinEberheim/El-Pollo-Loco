@@ -1,5 +1,8 @@
 body {
-    background-color: black;
+    background-image: url('../img/assets/background.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .game-wrapper {
