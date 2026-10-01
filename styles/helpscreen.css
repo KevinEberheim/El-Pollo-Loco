@@ -20,7 +20,7 @@
 
 .help-content {
     width: 100%;
-    padding: 3cqh 4cqw;
+    padding: 1cqh 3cqw;
     text-align: left;
 }
 
@@ -75,6 +75,10 @@
 
 .help-item:nth-child(-n+2)>img {
     height: 18cqh;
+}
+
+.help-item>img.help-coin {
+    transform: scale(2.0);
 }
 
 .help-content button {

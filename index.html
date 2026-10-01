@@ -73,7 +73,7 @@
                         </p>
                     </div>
                     <div class="help-item">
-                        <img src="img/8_coin/coin_1.png" alt="Coins">
+                        <img class="help-coin" src="img/8_coin/coin_1.png" alt="Coins">
                         <p><strong>Coins</strong><br>Collect all coins to summon the Endboss</p>
                     </div>
                     <div class="help-item">
@@ -98,7 +98,7 @@
                     <div class="panel-wrapper">
                         <button id="btnPlay" onclick="onPlayClick()"><img id="btnPlayImg" src="img/assets/play.svg"
                                 alt="Play-Icon"></button>
-                        <button id="btnPause" onclick="togglePause()"><img src="img/assets/pause.svg"
+                        <button class="dp-none" id="btnPause" onclick="togglePause()"><img src="img/assets/pause.svg"
                                 alt="Pause-Icon"></button>
                         <button id="btnHelp" onclick="toggleHelp()"><img src="img/assets/help.svg"
                                 alt="Help-Icon"></button>
@@ -109,7 +109,7 @@
                     </div>
                 </div>
 
-                <div class="panel touch-controls">
+                <div id="touchControls" class="panel touch-controls dp-none">
                     <div class="panel-wrapper">
                         <button id="btnLeft"><img src="img/assets/left.svg" alt="ArrowLeft-Icon"></button>
                         <button id="btnRight"><img src="img/assets/right.svg" alt="ArrowRight-Icon"></button>

@@ -62,6 +62,7 @@ function init() {
     document.getElementById('btnPlay').blur();
     playMusic(gameStartMusic);
     setPlayIcon(false);
+    setGameRunning(true);
     initGame();
 }
 
@@ -134,6 +135,7 @@ function goToStartScreen() {
     document.getElementById('impressumLink').classList.remove('dp-none');
     document.getElementById('hud').style.backgroundImage = "url('img/9_intro_outro_screens/start/startscreen_1.png')";
     setPlayIcon(true);
+    setGameRunning(false);
     playMusic(startScreenMusic);
 }
 
@@ -185,4 +187,13 @@ function bindGlobalEvents() {
 function openDialog(id) {
     document.getElementById(id).show();
     document.activeElement.blur();
+}
+
+/**
+ * Shows or hides the pause button and the touch controls.
+ * @param {boolean} running - True while a game is running, false on the start screen.
+ */
+function setGameRunning(running) {
+    document.getElementById('btnPause').classList.toggle('dp-none', !running);
+    document.getElementById('touchControls').classList.toggle('dp-none', !running);
 }
