@@ -83,8 +83,9 @@ class World {
         let now = Date.now();
         if (this.keyboard.D && now - this.lastThrowTime >= 1000) {
             this.lastThrowTime = now;
-            let bottle = new ThrowableObject(this.character.x + 50, this.character.y + 120, this);
-            this.throwableObjects.push(bottle);
+            const left = this.character.otherDirection;
+            const startX = left ? this.character.x - 30 : this.character.x + 50;
+            this.throwableObjects.push(new ThrowableObject(startX, this.character.y + 120, this, left));
             this.bottleCounter--;
             this.statusBarBottle.setPercentage(this.bottleCounter * 20);
         }

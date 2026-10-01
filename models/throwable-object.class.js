@@ -15,7 +15,7 @@ class ThrowableObject extends MovableObject {
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
     ]
 
-    constructor(x, y, world) {
+    constructor(x, y, world, goesLeft) {
         super().loadImage('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png');
         this.loadImages(this.IMAGES_ROTATE);
         this.loadImages(this.IMAGES_SPLASH);
@@ -24,42 +24,40 @@ class ThrowableObject extends MovableObject {
         this.y = y;
         this.width = 80;
         this.height = 80;
+        this.goesLeft = goesLeft;
         this.throw();
     }
 
     throw() {
         this.speedY = 30;
         this.applyGravity();
-        this.throwInterval = this.addInterval(() => {
-            if (this.world.gameOver) {
-                this.splashAndRemove(this.throwInterval);
-                return;
-            }
-            let endboss = this.world.endboss;
-            let hitsBoss = false;
+        this.throwInterval = this.addInterval(() => this.updateThrow(), 1000 / 25);
+    }
 
-            if (endboss) {
-                let bossHitboxForBottle = { ...endboss, offset: { ...endboss.offset, left: 100 } };
-                hitsBoss = this.isColliding(bossHitboxForBottle);
-            }
+    updateThrow() {
+        const i = this.throwInterval;
+        const chicken = this.findHitChicken();
+        if (this.world.gameOver || !this.isAboveGround()) this.splashAndRemove(i);
+        else if (this.hitsBoss()) { this.world.endboss.hit(); this.splashAndRemove(i); }
+        else if (chicken) { chicken.kill(); this.splashAndRemove(i); }
+        else this.fly();
+    }
 
-            let hitChicken = this.world.level.enemies.find(
-                enemy => enemy.constructor === Chicken && !enemy.isDead && this.isColliding(enemy)
-            );
+    fly() {
+        this.x += this.goesLeft ? -10 : 10;
+        this.playAnimation(this.IMAGES_ROTATE);
+    }
 
-            if (hitsBoss) {
-                endboss.hit();
-                this.splashAndRemove(this.throwInterval);
-            } else if (hitChicken) {
-                hitChicken.kill();
-                this.splashAndRemove(this.throwInterval);
-            } else if (!this.isAboveGround()) {
-                this.splashAndRemove(this.throwInterval);
-            } else {
-                this.x += 10;
-                this.playAnimation(this.IMAGES_ROTATE);
-            }
-        }, 1000 / 25);
+    hitsBoss() {
+        const boss = this.world.endboss;
+        if (!boss) return false;
+        return this.isColliding({ ...boss, offset: { ...boss.offset, left: 100 } });
+    }
+
+    findHitChicken() {
+        return this.world.level.enemies.find(
+            e => e.constructor === Chicken && !e.isDead && this.isColliding(e)
+        );
     }
 
     splashAndRemove(interval) {

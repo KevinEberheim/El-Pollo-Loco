@@ -1,4 +1,21 @@
 let level1;
+
+/**
+ * Initializes the first game level by creating a new Level instance
+ * with all required game objects.
+ *
+ * This function assembles the main level configuration, including:
+ * - enemies such as small chickens and regular chickens
+ * - background clouds
+ * - collectible coins
+ * - throwable bottles
+ * - layered background objects for the parallax effect
+ *
+ * The created level is stored in the global `level1` variable and can
+ * then be used by the game world for rendering and gameplay logic.
+ *
+ * @returns {void}
+ */
 function initLevel() {
     level1 = new Level(
         [
@@ -10,7 +27,9 @@ function initLevel() {
             new Chicken(),
         ],
         [
-            new Cloud(),
+            new Cloud(10),
+            new Cloud(750),
+            new Cloud(1500),
         ],
         [
             new Coins(),
