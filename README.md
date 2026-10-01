@@ -89,13 +89,30 @@ A modern browser. A local web server is recommended so images and audio load rel
 ### Run locally
 
 1. Clone or download the repository.
-2. Serve the project root with any static web server, for example:
-   ```bash
-   python -m http.server 8000
-   ```
-3. Open `http://localhost:8000` in your browser.
+2. Then start the game using one of the following options.
+ 
+**Option 1: VS Code with the Live Server extension (recommended)**
+ 
+1. Open the project folder in Visual Studio Code.
+2. Install the **Live Server** extension from the Extensions view (`Ctrl+Shift+X`).
+3. Right-click `index.html` in the file explorer and select **Open with Live Server**, or click **Go Live** in the bottom right status bar.
+4. The game opens in your default browser, usually at `http://127.0.0.1:5500`, and reloads automatically when you save a file.
 
-Alternatively, open `index.html` directly in the browser. Behavior may vary depending on the browser's handling of local files.
+**Option 2: Any other static web server**
+ 
+Serve the project root, for example with Python:
+ 
+```bash
+python -m http.server 8000
+```
+ 
+Then open `http://localhost:8000` in your browser.
+ 
+**Option 3: Open the file directly**
+ 
+Opening `index.html` directly in the browser may work, but behavior can vary depending on how the browser handles local files. A local server is recommended.
+ 
+To test the touch controls, open the served URL on a mobile device in the same network, or use the device emulation of your browser's developer tools.
 
 ## Project Structure
 
