@@ -15,6 +15,12 @@ main {
     margin: 0 auto;
 }
 
+.impressum-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 h1,
 h2 {
     color: orange;
@@ -23,4 +29,20 @@ h2 {
 a {
     color: orange;
     text-decoration: none;
+}
+
+.close-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    margin-left: auto;
+    border-radius: 50%;
+    background-color: orange;
+}
+
+.close-button img {
+    width: 30px;
+    height: 30px;
 }
