@@ -13,6 +13,7 @@ class World {
     statusBarHealthCharacter = new StatusBar(10, 0, 'IMAGES_Health_Character', 100);
     statusBarCoins = new StatusBar(10, 50, 'IMAGES_Coins', 0);
     statusBarBottle = new StatusBar(10, 100, 'IMAGES_Bottle', 0);
+    statusBarBottle2 = new StatusBar(10, 150, 'IMAGES_Bottle', 0);
     statusBarHealthEndboss;
     coinCollectSound = SoundManager.create('audio/coinCollect.mp3', 0.4);
     bottleCollectSound = SoundManager.create('audio/itemCollect.mp3', 0.4);
@@ -113,7 +114,7 @@ class World {
             const startX = left ? this.character.x - 30 : this.character.x + 50;
             this.throwableObjects.push(new ThrowableObject(startX, this.character.y + 120, this, left));
             this.bottleCounter--;
-            this.statusBarBottle.setPercentage(this.bottleCounter * 20);
+            this.updateBottleBars();
         }
     }
 
@@ -141,12 +142,21 @@ class World {
             if (this.character.isColliding(bottle)) {
                 bottle.clearAllIntervals();
                 this.bottleCounter++;
-                this.statusBarBottle.setPercentage(this.bottleCounter * 20);
+                this.updateBottleBars();
                 SoundManager.play(this.bottleCollectSound);
                 return false;
             }
             return true;
         });
+    }
+
+    /**
+    * Updates both bottle status bars. The first bar shows up to 5 bottles,
+    * the second bar shows the bottles beyond that.
+    */
+    updateBottleBars() {
+        this.statusBarBottle.setPercentage(Math.min(this.bottleCounter, 5) * 20);
+        this.statusBarBottle2.setPercentage(Math.max(0, this.bottleCounter - 5) * 20);
     }
 
     /**
@@ -156,7 +166,7 @@ class World {
         this.endboss = new Endboss();
         this.endboss.world = this;
         this.level.enemies.push(this.endboss);
-        this.statusBarHealthEndboss = new StatusBar(500, 50, 'IMAGES_Health_Endboss', 100);
+        this.statusBarHealthEndboss = new StatusBar(500, 60, 'IMAGES_Health_Endboss', 100);
         playMusic(endbossMusic);
     }
 
@@ -261,6 +271,7 @@ class World {
         this.addToMap(this.statusBarHealthCharacter);
         this.addToMap(this.statusBarCoins);
         this.addToMap(this.statusBarBottle);
+        if (this.bottleCounter > 5) this.addToMap(this.statusBarBottle2);
         if (this.statusBarHealthEndboss) this.addToMap(this.statusBarHealthEndboss);
     }
 

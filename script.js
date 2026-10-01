@@ -178,6 +178,7 @@ function bindGlobalEvents() {
         if (e.matches) setPaused(true);
     });
     SoundManager.updateButton();
+    disableTouchContextMenu();
 }
 
 /**
@@ -196,4 +197,13 @@ function openDialog(id) {
 function setGameRunning(running) {
     document.getElementById('btnPause').classList.toggle('dp-none', !running);
     document.getElementById('touchControls').classList.toggle('dp-none', !running);
+}
+
+/**
+ * Blocks the context menu on touch devices (long press), keeps it on desktop.
+ */
+function disableTouchContextMenu() {
+    document.addEventListener('contextmenu', (e) => {
+        if (window.matchMedia('(pointer: coarse)').matches) e.preventDefault();
+    });
 }
