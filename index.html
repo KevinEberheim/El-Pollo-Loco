@@ -36,7 +36,7 @@
     <div id="fullscreen" class="game-wrapper">
         <canvas id="canvas" width="720" height="480" class="dp-none">
         </canvas>
-        <div id="endscreen" class="endscreen dp-none">
+        <dialog id="endscreen" class="endscreen">
             <img id="endscreenImg" src="" alt="">
             <div class="endscreen-buttons">
                 <button id="btnRestart" onclick="restartGame()"><img src="img/assets/replay.svg"
@@ -44,8 +44,8 @@
                 <button id="btnStart" onclick="goToStartScreen()"><img src="img/assets/homescreen.svg"
                         alt="Homescreen-Icon"></button>
             </div>
-        </div>
-        <div id="helpscreen" class="helpscreen dp-none">
+        </dialog>
+        <dialog id="helpscreen" class="helpscreen">
             <div class="help-content">
                 <div class="help-header">
                     <h2>How to Play</h2>
@@ -91,7 +91,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </dialog>
         <div class="overlay">
             <div id="hud" class="background-cover">
                 <div class="panel">

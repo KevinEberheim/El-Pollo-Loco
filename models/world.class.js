@@ -201,10 +201,9 @@ class World {
      * @param {boolean} won - True if the player won.
      */
     showEndScreen(won) {
-        let overlay = document.getElementById('endscreen');
         let img = document.getElementById('endscreenImg');
         img.src = 'img/You won, you lost/Game over A.png';
-        overlay.classList.remove('dp-none');
+        openDialog('endscreen');
         setTimeout(() => {
             img.src = won
                 ? 'img/You won, you lost/You Win A.png'

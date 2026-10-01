@@ -120,7 +120,7 @@ function updateFullscreenIcon() {
  * Hides the end screen and starts a new game.
  */
 function restartGame() {
-    document.getElementById('endscreen').classList.add('dp-none');
+    document.getElementById('endscreen').close();
     playMusic(gameStartMusic);
     initGame();
 }
@@ -129,7 +129,7 @@ function restartGame() {
  * Hides the end screen and the canvas and shows the start screen again.
  */
 function goToStartScreen() {
-    document.getElementById('endscreen').classList.add('dp-none');
+    document.getElementById('endscreen').close();
     document.getElementById('canvas').classList.add('dp-none');
     document.getElementById('impressumLink').classList.remove('dp-none');
     document.getElementById('hud').style.backgroundImage = "url('img/9_intro_outro_screens/start/startscreen_1.png')";
@@ -149,7 +149,9 @@ function switchSoundOnOff() {
  * Shows or hides the help screen.
  */
 function toggleHelp() {
-    document.getElementById('helpscreen').classList.toggle('dp-none');
+    const help = document.getElementById('helpscreen');
+    if (help.open) help.close();
+    else openDialog('helpscreen');
     document.getElementById('btnHelp').blur();
 }
 
@@ -174,4 +176,13 @@ function bindGlobalEvents() {
         if (e.matches) setPaused(true);
     });
     SoundManager.updateButton();
+}
+
+/**
+ * Opens a dialog without making it modal and removes the automatic focus.
+ * @param {string} id - ID of the dialog element.
+ */
+function openDialog(id) {
+    document.getElementById(id).show();
+    document.activeElement.blur();
 }
