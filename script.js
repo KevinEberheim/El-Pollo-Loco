@@ -4,6 +4,11 @@ const endbossMusic = SoundManager.create('audio/endbossArrived.mp3', 0.1, true);
 let isPaused = false;
 const portraitQuery = window.matchMedia('(orientation: portrait) and (pointer: coarse)');
 
+/**
+ * Pauses or resumes the game, including sounds and keyboard input.
+ * Does nothing without a running world, after game over, or when resuming in portrait mode.
+ * @param {boolean} state - True to pause, false to resume.
+ */
 function setPaused(state) {
     if (!world || world.gameOver) return;
     if (!state && portraitQuery.matches) return;
@@ -18,11 +23,17 @@ function setPaused(state) {
     setPlayIcon(state);
 }
 
+/**
+ * Toggles the pause state and removes focus from the pause button.
+ */
 function togglePause() {
     setPaused(!isPaused);
     document.getElementById('btnPause').blur();
 }
 
+/**
+ * Resumes the game if it is paused, otherwise starts (or restarts) it.
+ */
 function onPlayClick() {
     if (isPaused) {
         setPaused(false);
@@ -32,11 +43,18 @@ function onPlayClick() {
     }
 }
 
+/**
+ * Stops all background music tracks and plays the given one.
+ * @param {HTMLAudioElement} track - The music track to play.
+ */
 function playMusic(track) {
     [startScreenMusic, gameStartMusic, endbossMusic].forEach(SoundManager.stop);
     SoundManager.play(track);
 }
 
+/**
+ * Switches from the start screen to the game and starts a new session.
+ */
 function init() {
     document.getElementById('impressumLink').classList.add('dp-none');
     document.getElementById('hud').style.backgroundImage = 'none';
@@ -47,8 +65,20 @@ function init() {
     initGame();
 }
 
+/**
+ * Checks whether the document is currently in fullscreen mode (with vendor prefixes).
+ * @returns {boolean} True if an element is displayed in fullscreen.
+ */
+function isFullscreen() {
+    return !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+}
+
+/**
+ * Enters or exits fullscreen mode.
+ * @param {string} id - ID of the element that should go fullscreen.
+ */
 function toggleFullscreen(id) {
-    if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+    if (isFullscreen()) {
         exitFullscreen();
     } else {
         enterFullscreen(document.getElementById(id));
@@ -56,65 +86,87 @@ function toggleFullscreen(id) {
     document.getElementById('btnFullscreen').blur();
 }
 
+/**
+ * Requests fullscreen for the element, using vendor prefixes as fallback.
+ * @param {HTMLElement} element - The element to display in fullscreen.
+ */
 function enterFullscreen(element) {
-    if (element.requestFullscreen) {
-        element.requestFullscreen();
-    } else if (element.webkitRequestFullscreen) {
-        element.webkitRequestFullscreen();
-    } else if (element.msRequestFullscreen) {
-        element.msRequestFullscreen();
-    }
+    const request = element.requestFullscreen
+        || element.webkitRequestFullscreen
+        || element.msRequestFullscreen;
+    if (request) request.call(element);
 }
 
+/**
+ * Exits fullscreen mode, using vendor prefixes as fallback.
+ */
 function exitFullscreen() {
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-    }
+    const exit = document.exitFullscreen
+        || document.webkitExitFullscreen
+        || document.msExitFullscreen;
+    if (exit) exit.call(document);
 }
 
+/**
+ * Updates the fullscreen button icon according to the current fullscreen state.
+ */
+function updateFullscreenIcon() {
+    document.getElementById('btnFullscreenImg').src = isFullscreen()
+        ? 'img/assets/fullscreen_exit.svg'
+        : 'img/assets/fullscreen_open.svg';
+}
+
+/**
+ * Hides the end screen and starts a new game.
+ */
 function restartGame() {
     document.getElementById('endscreen').classList.add('dp-none');
     playMusic(gameStartMusic);
     initGame();
 }
 
+/**
+ * Hides the end screen and the canvas and shows the start screen again.
+ */
 function goToStartScreen() {
     document.getElementById('endscreen').classList.add('dp-none');
     document.getElementById('canvas').classList.add('dp-none');
     document.getElementById('impressumLink').classList.remove('dp-none');
     document.getElementById('hud').style.backgroundImage = "url('img/9_intro_outro_screens/start/startscreen_1.png')";
     setPlayIcon(true);
-    playMusic(startScreenMusic)
+    playMusic(startScreenMusic);
 }
 
+/**
+ * Toggles the sound on or off and removes focus from the mute button.
+ */
 function switchSoundOnOff() {
     SoundManager.toggle();
     document.getElementById('btnMute').blur();
-    SoundManager.updateButton();
 }
 
+/**
+ * Shows or hides the help screen.
+ */
 function toggleHelp() {
     document.getElementById('helpscreen').classList.toggle('dp-none');
     document.getElementById('btnHelp').blur();
 }
 
+/**
+ * Sets the icon of the play button.
+ * @param {boolean} isHome - True for the play icon (start screen), false for the replay icon.
+ */
 function setPlayIcon(isHome) {
     document.getElementById('btnPlayImg').src = isHome
         ? 'img/assets/play.svg'
         : 'img/assets/replay.svg';
 }
 
-function updateFullscreenIcon() {
-    const isFs = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
-    document.getElementById('btnFullscreenImg').src = isFs
-        ? 'img/assets/fullscreen_exit.svg'
-        : 'img/assets/fullscreen_open.svg';
-}
-
+/**
+ * Registers global listeners (fullscreen changes, orientation changes)
+ * and sets the initial mute button icon.
+ */
 function bindGlobalEvents() {
     document.addEventListener('fullscreenchange', updateFullscreenIcon);
     document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);

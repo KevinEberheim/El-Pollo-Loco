@@ -3,12 +3,19 @@ class Cloud extends MovableObject {
     width = 500;
     height = 250;
 
+    /**
+    * Creates a cloud at a randomized x position and starts its movement.
+    * @param {number} x - Base x position, a random offset of up to 500 is added.
+    */
     constructor(x) {
         super().loadImage('img/5_background/layers/4_clouds/1.png');
         this.x = x + Math.random() * 500;
         this.animate();
     }
 
+    /**
+    * Moves the cloud to the left at 60 FPS and resets it once it left the visible area.
+    */
     animate() {
         this.addInterval(() => {
             this.moveLeft();

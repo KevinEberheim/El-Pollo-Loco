@@ -63,6 +63,9 @@ class Character extends MovableObject {
     jumpSound = SoundManager.create('audio/jump.mp3', 0.4);
     deathSoundPlayed = false;
 
+    /**
+    * Creates the character, preloads all images and starts gravity and animations.
+    */
     constructor() {
         super().loadImage('img/2_character_pepe/1_idle/idle/I-1.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -76,69 +79,113 @@ class Character extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Starts all character intervals (idle, walking, movement, state animation).
+     */
     animate() {
+        this.startIdleAnimation();
+        this.startWalkAnimation();
+        this.startMovementLoop();
+        this.startStateAnimation();
+    }
 
+    /**
+     * Plays the idle animation while the character stands still on the ground.
+     */
+    startIdleAnimation() {
         this.addInterval(() => {
             if (this.world.gameOver) return;
-            else if (!this.isAboveGround() && !(this.world.keyboard.LEFT || this.world.keyboard.RIGHT)) {
+            if (!this.isAboveGround() && !(this.key.LEFT || this.key.RIGHT)) {
                 this.playAnimationOnce(this.IMAGES_IDLE);
             }
         }, 500);
+    }
 
+    /**
+     * Plays the walking animation while a direction key is pressed on the ground.
+     */
+    startWalkAnimation() {
         this.addInterval(() => {
             if (this.world.gameOver) return;
-            if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && !this.isAboveGround() && !this.isHurt()) {
-                this.playAnimation(this.IMAGES_WALKING)
+            if ((this.key.RIGHT || this.key.LEFT) && !this.isAboveGround() && !this.isHurt()) {
+                this.playAnimation(this.IMAGES_WALKING);
             }
-        }, 50)
+        }, 50);
+    }
 
+    /**
+     * Updates position, camera and jumping at 60 FPS.
+     */
+    startMovementLoop() {
         this.addInterval(() => {
             if (this.world.gameOver) return;
-
-            if (this.world.keyboard.LEFT && this.x > 0) {
-                this.moveLeft();
-                this.otherDirection = true;
-            }
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                this.moveRight();
-                this.otherDirection = false;
-            }
-
+            this.handleMovement();
             this.world.camera_x = -this.x + 100;
-
-            if ((this.world.keyboard.SPACE || this.world.keyboard.UP) && !this.isAboveGround()) {
-                this.jump();
-            }
-
+            this.handleJumpInput();
         }, 1000 / 60);
+    }
 
+    /**
+     * Moves the character left or right depending on keyboard input and level bounds.
+     */
+    handleMovement() {
+        if (this.key.LEFT && this.x > 0) {
+            this.moveLeft();
+            this.otherDirection = true;
+        }
+        if (this.key.RIGHT && this.x < this.world.level.level_end_x) {
+            this.moveRight();
+            this.otherDirection = false;
+        }
+    }
+
+    /**
+     * Triggers a jump if jump input is active and the character is on the ground.
+     */
+    handleJumpInput() {
+        if ((this.key.SPACE || this.key.UP) && !this.isAboveGround()) this.jump();
+    }
+
+    /**
+     * Plays death, jump or hurt animation depending on the current state.
+     */
+    startStateAnimation() {
         this.addInterval(() => {
-            if (this.isDead()) {
-                this.handleDeathState();
-            } else if (this.isAboveGround()) {
-                this.playAnimationOnce(this.IMAGES_JUMPING);
-            } else if (this.isHurt()) {
-                this.handleHurtState();
-            }
+            if (this.isDead()) this.handleDeathState();
+            else if (this.isAboveGround()) this.playAnimationOnce(this.IMAGES_JUMPING);
+            else if (this.isHurt()) this.handleHurtState();
         }, 200);
     }
 
+    /**
+     * Makes the character jump and plays the jump sound.
+     */
     jump() {
         SoundManager.play(this.jumpSound);
         this.currentImage = 0;
         this.speedY = 30;
     }
 
+    /**
+     * Plays the death animation and the hurt sound once.
+     */
     handleDeathState() {
         this.playAnimationOnce(this.IMAGES_DEAD);
         this.playSoundOnce('deathSoundPlayed');
     }
 
+    /**
+     * Plays the hurt animation and a throttled hurt sound.
+     */
     handleHurtState() {
         this.playAnimationOnce(this.IMAGES_HURT);
         this.playSoundThrottled('lastHurtSound', 1000);
     }
 
+    /**
+     * Plays the hurt sound only once, tracked by a flag on this object.
+     * @param {string} flagName - Name of the boolean property used as guard.
+     */
     playSoundOnce(flagName) {
         if (!this[flagName]) {
             this[flagName] = true;
@@ -146,12 +193,25 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Plays the hurt sound only if the minimum interval has passed.
+     * @param {string} timestampName - Name of the property storing the last play time.
+     * @param {number} minInterval - Minimum time between plays in milliseconds.
+     */
     playSoundThrottled(timestampName, minInterval) {
         const now = new Date().getTime();
         if (!this[timestampName] || now - this[timestampName] >= minInterval) {
             this[timestampName] = now;
             SoundManager.play(this.hurtSound);
         }
+    }
+
+    /**
+     * Returns the keyboard input handler of the current world.
+    * @returns {Keyboard} The shared keyboard instance.
+    */
+    get key() {
+        return this.world.keyboard;
     }
 
 }

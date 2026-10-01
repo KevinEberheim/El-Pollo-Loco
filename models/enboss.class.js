@@ -44,11 +44,29 @@ class Endboss extends MovableObject {
     ];
 
     isDead = false;
+    isAlerting = false;
+    hasAlerted = false;
     energy = 100;
+    walkInterval;
+    animateInterval;
+    deathInterval;
     hitSound = SoundManager.create('audio/chickenHit.mp3', 0.4);
     deathSound = SoundManager.create('audio/chickenDeath.mp3', 0.4);
 
 
+    isDead = false;
+    isAlerting = false;
+    hasAlerted = false;
+    energy = 100;
+    walkInterval;
+    animateInterval;
+    deathInterval;
+    hitSound = SoundManager.create('audio/chickenHit.mp3', 0.4);
+    deathSound = SoundManager.create('audio/chickenDeath.mp3', 0.4);
+
+    /**
+     * Creates the endboss, preloads all images and starts its animations.
+     */
     constructor() {
         super().loadImage('img/4_enemie_boss_chicken/1_walk/G1.png');
         this.loadImages(this.IMAGES_Walking);
@@ -56,77 +74,119 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_Attack);
         this.loadImages(this.IMAGES_Hurt);
         this.loadImages(this.IMAGES_Dead);
-        this.offset.left = -50
+        this.offset.left = -50;
         this.x = 2500;
         this.speed = 2.5 + Math.random() * 0.5;
         this.animate();
     }
 
+    /**
+     * Starts the movement and animation intervals.
+     */
     animate() {
-        this.walkInterval = this.addInterval(() => {
-            if (!this.isAlerting && !this.hasAlerted && !this.isDead) {
-                this.moveLeft();
-            }
-        }, 1000 / 60)
-
-        this.animateInterval = this.addInterval(() => {
-            if (this.isDead || this.world.character.isDead()) return;
-            let distance = this.x - this.world.character.x;
-
-            if (this.isAlerting) {
-                this.playAnimationOnce(this.IMAGES_Alert);
-                if (this.currentImage >= this.IMAGES_Alert.length) {
-                    this.alertIsFinished();
-                }
-                return;
-            }
-
-            if (distance > 200) {
-                this.playAnimation(this.IMAGES_Walking);
-                this.hasAlerted = false;
-            } else if (distance <= 200 && !this.hasAlerted) {
-                this.isAlerting = true;
-                this.currentImage = 0;
-            } else if (this.hasAlerted) {
-                this.playAnimation(this.IMAGES_Attack);
-            }
-
-        }, 1000 / 15);
+        this.walkInterval = this.addInterval(() => this.updateMovement(), 1000 / 60);
+        this.animateInterval = this.addInterval(() => this.updateAnimation(), 1000 / 15);
     }
 
+    /**
+     * Moves the endboss to the left unless it is alerting, has alerted or is dead.
+     */
+    updateMovement() {
+        if (!this.isAlerting && !this.hasAlerted && !this.isDead) this.moveLeft();
+    }
+
+    /**
+     * Chooses the animation based on state and distance to the character.
+     */
+    updateAnimation() {
+        if (this.isDead || this.world.character.isDead()) return;
+        if (this.isAlerting) this.playAlert();
+        else if (this.distanceToCharacter() > 200) this.playWalk();
+        else if (!this.hasAlerted) this.startAlert();
+        else this.playAnimation(this.IMAGES_Attack);
+    }
+
+    /**
+     * Calculates the horizontal distance to the character.
+     * @returns {number} Distance in pixels (positive if the boss is to the right).
+     */
+    distanceToCharacter() {
+        return this.x - this.world.character.x;
+    }
+
+    /**
+     * Plays the walking animation and resets the alert state.
+     */
+    playWalk() {
+        this.playAnimation(this.IMAGES_Walking);
+        this.hasAlerted = false;
+    }
+
+    /**
+     * Starts the alert phase from the first alert image.
+     */
+    startAlert() {
+        this.isAlerting = true;
+        this.currentImage = 0;
+    }
+
+    /**
+     * Plays the alert animation once and finishes the alert phase afterwards.
+     */
+    playAlert() {
+        this.playAnimationOnce(this.IMAGES_Alert);
+        if (this.currentImage >= this.IMAGES_Alert.length) this.alertIsFinished();
+    }
+
+    /**
+     * Ends the alert phase and moves the boss slightly forward.
+     */
     alertIsFinished() {
         this.isAlerting = false;
         this.hasAlerted = true;
         this.x -= 40;
-    };
-
-    hit() {
-        if (this.isHurt()) return;
-        this.energy -= 20;
-        if (this.energy >= 20) {
-            SoundManager.play(this.hitSound);
-            this.playAnimationOnce(this.IMAGES_Hurt);
-        }
-        if (this.energy < 20) {
-            SoundManager.play(this.deathSound);
-            this.energy = 0;
-            this.kill();
-        } else {
-            this.lastHit = new Date().getTime();
-        }
     }
 
+    /**
+     * Reduces the boss energy by 20 and either kills or hurts it.
+     * Ignored while the boss is dead or in its hurt cooldown.
+     */
+    hit() {
+        if (this.isDead || this.isHurt()) return;
+        this.energy -= 20;
+        if (this.energy < 20) this.kill();
+        else this.playHurt();
+    }
+
+    /**
+     * Plays the hurt sound and animation and starts the hurt cooldown.
+     */
+    playHurt() {
+        SoundManager.play(this.hitSound);
+        this.playAnimationOnce(this.IMAGES_Hurt);
+        this.lastHit = new Date().getTime();
+    }
+
+    /**
+     * Checks whether the boss was hit within the last second.
+     * @returns {boolean} True if the hurt cooldown is still active.
+     */
     isHurt() {
         let timepassed = new Date().getTime() - this.lastHit;
         timepassed = timepassed / 1000;
         return timepassed < 1;
     }
 
+    /**
+     * Kills the boss: plays the death sound, stops all movement and starts the death animation.
+     */
     kill() {
+        SoundManager.play(this.deathSound);
+        this.energy = 0;
         this.isDead = true;
         this.speed = 0;
         clearInterval(this.walkInterval);
         clearInterval(this.animateInterval);
-        this.deathIntervall = this.addInterval(() => { this.playAnimationOnce(this.IMAGES_Dead) }, 100)
+        this.deathInterval = this.addInterval(() => this.playAnimationOnce(this.IMAGES_Dead), 100);
     }
 }
