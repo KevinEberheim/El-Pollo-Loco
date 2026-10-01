@@ -7,7 +7,7 @@ let level1;
 function initLevel() {
     level1 = new Level(
         createEnemies(),
-        [new Cloud(10), new Cloud(750), new Cloud(1500)],
+        [new Cloud(10), new Cloud(1500)],
         Array.from({ length: 5 }, () => new Coins()),
         Array.from({ length: 10 }, () => new Bottles()),
         createBackgroundObjects()
