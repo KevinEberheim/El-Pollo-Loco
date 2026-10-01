@@ -42,18 +42,7 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/5_dead/G25.png',
         'img/4_enemie_boss_chicken/5_dead/G26.png'
     ];
-
-    isDead = false;
-    isAlerting = false;
-    hasAlerted = false;
-    energy = 100;
-    walkInterval;
-    animateInterval;
-    deathInterval;
-    hitSound = SoundManager.create('audio/chickenHit.mp3', 0.4);
-    deathSound = SoundManager.create('audio/chickenDeath.mp3', 0.4);
-
-
+  
     isDead = false;
     isAlerting = false;
     hasAlerted = false;
@@ -74,7 +63,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_Attack);
         this.loadImages(this.IMAGES_Hurt);
         this.loadImages(this.IMAGES_Dead);
-        this.offset.left = -50;
+        this.offset.left = 50;
         this.x = 2500;
         this.speed = 2.5 + Math.random() * 0.5;
         this.animate();
@@ -144,7 +133,7 @@ class Endboss extends MovableObject {
     alertIsFinished() {
         this.isAlerting = false;
         this.hasAlerted = true;
-        this.x -= 40;
+        this.x -= 140;
     }
 
     /**
